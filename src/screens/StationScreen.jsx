@@ -291,7 +291,7 @@ const StationScreen = ({ onSubmit }) => {
           whiteSpace: 'nowrap'
         }}
       >
-        <ScrambleText text="Dr. A. Voidsworth, Chief Meteorologist of Feelings | Est. whenever you started procrastinating" />
+        <ScrambleText text="VibeCast Live Desk | Est. whenever you started procrastinating" />
       </motion.div>
 
       {/* USELESS FEATURE 1: Panic Button */}

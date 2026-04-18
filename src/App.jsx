@@ -13,6 +13,7 @@ import { getLivePhraseFromLevel, getWeatherConditionFromLevel } from '../utils/w
 
 import useVisualInversion from '../hooks/useVisualInversion';
 import CursorTrail from './components/CursorTrail';
+import WeatherEngine from './components/WeatherEngine';
 
 const TOTAL_STEPS = 47;
 const INITIAL_SCREEN = 1;
@@ -118,6 +119,7 @@ function App() {
     certificate,
     forecastSource,
     forecastModel,
+    weatherType,
     error,
     startForecast,
     reset: resetSpiral,
@@ -449,6 +451,7 @@ function App() {
         </svg>
       </div>
 
+      <WeatherEngine weatherType={screen > 1 ? weatherType : null} />
       <NewsTicker />
       <CursorTrail />
       {screen < 3 && (

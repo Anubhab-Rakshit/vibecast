@@ -13,6 +13,7 @@ const initialState = {
   certificate: null,
   forecastSource: 'idle',
   forecastModel: null,
+  weatherType: 'FOG', // Default to FOG
   error: null,
 };
 
@@ -36,6 +37,7 @@ export default function useSpiral() {
   const [certificate, setCertificate] = useState(initialState.certificate);
   const [forecastSource, setForecastSource] = useState(initialState.forecastSource);
   const [forecastModel, setForecastModel] = useState(initialState.forecastModel);
+  const [weatherType, setWeatherType] = useState(initialState.weatherType);
   const [error, setError] = useState(initialState.error);
 
   const cleanupRef = useRef(() => {});
@@ -61,6 +63,7 @@ export default function useSpiral() {
     setCertificate(initialState.certificate);
     setForecastSource(initialState.forecastSource);
     setForecastModel(initialState.forecastModel);
+    setWeatherType(initialState.weatherType);
     setError(initialState.error);
 
     cleanupRef.current = () => {};
@@ -95,6 +98,7 @@ export default function useSpiral() {
       setCertificate(initialState.certificate);
       setForecastSource('pending');
       setForecastModel(null);
+      setWeatherType(initialState.weatherType);
       setError(initialState.error);
 
       const isActive = () => !isCancelled && runIdRef.current === activeRunId;
@@ -150,9 +154,12 @@ export default function useSpiral() {
             setIsStreaming(false);
             setIsComplete(false);
           },
-          onComplete: () => {
+          onComplete: (payload) => {
             if (!isActive()) {
               return;
+            }
+            if (payload?.weatherType) {
+              setWeatherType(payload.weatherType);
             }
             setIsStreaming(false);
             setIsComplete(true);
@@ -199,6 +206,7 @@ export default function useSpiral() {
     certificate,
     forecastSource,
     forecastModel,
+    weatherType,
     error,
     startForecast,
     reset,

@@ -106,12 +106,12 @@ const OfficialSeal = () => {
           {/* Arc text path — upper arc */}
           <path id="seal-arc-top" d="M 50,50 m -38,0 a 38,38 0 1,1 76,0" fill="none" />
           <text style={{ fontSize: '6.5px', fontFamily: 'var(--font-mono)', fill: '#8B7355', letterSpacing: '0.12em' }}>
-            <textPath href="#seal-arc-top">NATIONAL MENTAL WEATHER SERVICE</textPath>
+            <textPath href="#seal-arc-top">VIBECAST LIVE FORECAST NETWORK</textPath>
           </text>
 
-          {/* "DR. A. VOIDSWORTH" centered below middle */}
+          {/* "VIBECAST" centered below middle */}
           <text x="50" y="78" textAnchor="middle" style={{ fontSize: '5.5px', fontFamily: 'var(--font-mono)', fill: '#8B7355', letterSpacing: '0.1em' }}>
-            DR. A. VOIDSWORTH
+            VIBECAST
           </text>
 
           {/* Center weather icon group */}
@@ -386,7 +386,7 @@ const DocumentScreen = ({
         <div style={{ textAlign: 'center', marginBottom: '32px' }}>
           <div style={{ color: '#8B7355', letterSpacing: '-1px', overflow: 'hidden', whiteSpace: 'nowrap' }}>━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</div>
           <h1 style={{ fontFamily: 'var(--font-mono)', fontSize: '14px', fontWeight: 'bold', color: '#2C2416', letterSpacing: '0.12em', margin: '12px 0 4px 0' }}>
-            NATIONAL MENTAL WEATHER SERVICE
+            VIBECAST
           </h1>
           <div style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', color: '#5C4A2A', letterSpacing: '0.05em' }}>
             OFFICIAL PSYCHOLOGICAL FORECAST — 47-STEP CERTIFIED PROTOCOL
@@ -449,7 +449,7 @@ const DocumentScreen = ({
             ))}
           </svg>
           <div style={{ fontFamily: 'var(--font-mono)', fontSize: '8px', color: '#8B7355', marginTop: '4px' }}>
-            USELESS-47-VOIDSWORTH
+            USELESS-47-VIBECAST
           </div>
         </div>
 

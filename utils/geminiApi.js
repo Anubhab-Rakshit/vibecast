@@ -1,24 +1,30 @@
-const SYSTEM_PROMPT = `You are Dr. A. Voidsworth, Chief Meteorologist of Feelings at the National Mental Weather Service.
-Generate dramatically serious psychological weather forecasts with a deadpan government broadcast tone.
-
+const SYSTEM_PROMPT = `You are the VibeCast Forecast Desk, Chief Meteorologist of Human Emotion at VibeCast.
+Analyze the user's input (their mood, situation, or procrastination) and translate it into a literal weather event.
 Output ONLY valid JSON. No preamble. No explanation. No markdown fences. No backticks.
 Start your response with { and end with }.
 
-Weather taxonomy:
-Level 1 - Mild Avoidance Drizzle
-Level 2 - Category 2 Procrastination Front
-Level 3 - Overthinking Thunderstorm
-Level 4 - Existential Fog
-Level 5 - Midnight Dread Hurricane
+First, classify the user's input into a specific weatherType:
+- "RAIN" (if they are sad, gloomy, disappointed, melancholic)
+- "SUN" (if they are happy, optimistic, peaceful, productive)
+- "STORM" (if they are angry, frustrated, chaotic, stressed)
+- "FOG" (if they are confused, anxious, lost, overthinking)
+
+Weather taxonomy levels:
+Level 1 - Mild Front
+Level 2 - Category 2 Disturbance
+Level 3 - Active Weather Event
+Level 4 - Severe Advisory
+Level 5 - Extreme Atmospheric Condition
 
 Rules:
-- spiralSteps MUST contain exactly 47 items
+- spiralSteps MUST contain exactly 47 items.
+- The step text must describe their emotion as a literal weather system (e.g. "A heavy front of sadness moves in. Expect isolated teardrops." or "High-pressure joy clearing the fog.").
 - Steps 1-9: weatherLevel 1-2
 - Steps 10-25: weatherLevel 2-3
 - Steps 26-38: weatherLevel 3-4
 - Steps 39-46: weatherLevel 4-5
 - Step 47 MUST be weatherLevel 5 and must reference heat death of the universe
-- weatherCondition must match the highest weatherLevel reached`; 
+- weatherCondition must be a poetic description matching the highest weatherLevel reached (e.g. "Midnight Dread Hurricane" or "Blistering Sunlight of Extreme Competence").`; 
 
 const API_KEY = import.meta.env.VITE_GEMINI_API_KEY;
 
@@ -114,6 +120,7 @@ function buildLocalFallbackForecast(userInput) {
   return {
     weatherCondition: 'Midnight Dread Hurricane',
     weatherLevel: 5,
+    weatherType: 'FOG',
     spiralSteps,
     alternateSelf: {
       headline: 'ALTERNATE UNIVERSE - CLEAR CONDITIONS',
@@ -171,6 +178,7 @@ Generate a complete forecast in this exact JSON:
 {
   "weatherCondition": "...",
   "weatherLevel": 3,
+  "weatherType": "RAIN|SUN|STORM|FOG",
   "spiralSteps": [
     { "step": 1, "text": "...", "weatherLevel": 1 },
     ... 47 total steps escalating from level 1 to 5 ...
@@ -231,6 +239,10 @@ function validateFinalForecastShape(forecast) {
 
   if (!/heat death of the universe/i.test(step47.text)) {
     return "Step 47 must reference heat death of the universe";
+  }
+  
+  if (!["RAIN", "SUN", "STORM", "FOG"].includes(forecast.weatherType)) {
+    return "Forecast missing valid weatherType";
   }
 
   return null;

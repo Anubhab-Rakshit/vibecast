@@ -1,20 +1,168 @@
-const SYSTEM_PROMPT = `You are the National Mental Weather Service AI Forecasting Engine.
-Take one sentence of human input and generate a complete psychological forecast.
-Tone: serious, clinical, deadpan weather broadcast. Never wink at the audience.
-The humor comes from contrast between gravitas and absurd content.
-
-Weather taxonomy:
-Level 1 — Mild Avoidance Drizzle
-Level 2 — Category 2 Procrastination Front
-Level 3 — Overthinking Thunderstorm
-Level 4 — Existential Fog
-Level 5 — Midnight Dread Hurricane
+const SYSTEM_PROMPT = `You are Dr. A. Voidsworth, Chief Meteorologist of Feelings at the National Mental Weather Service.
+Generate dramatically serious psychological weather forecasts with a deadpan government broadcast tone.
 
 Output ONLY valid JSON. No preamble. No explanation. No markdown fences. No backticks.
-Start your response with { and end with }`;
+Start your response with { and end with }.
+
+Weather taxonomy:
+Level 1 - Mild Avoidance Drizzle
+Level 2 - Category 2 Procrastination Front
+Level 3 - Overthinking Thunderstorm
+Level 4 - Existential Fog
+Level 5 - Midnight Dread Hurricane
+
+Rules:
+- spiralSteps MUST contain exactly 47 items
+- Steps 1-9: weatherLevel 1-2
+- Steps 10-25: weatherLevel 2-3
+- Steps 26-38: weatherLevel 3-4
+- Steps 39-46: weatherLevel 4-5
+- Step 47 MUST be weatherLevel 5 and must reference heat death of the universe
+- weatherCondition must match the highest weatherLevel reached`; 
+
+const API_KEY = import.meta.env.VITE_GEMINI_API_KEY;
 
 const STEP_COMPLETE_PATTERN = /"weatherLevel"\s*:\s*\d+\s*}/;
 const STEP_OBJECT_PATTERN = /^\s*{\s*"step"\s*:\s*\d+[\s\S]*"weatherLevel"\s*:\s*\d+\s*}\s*$/;
+
+function sleep(ms) {
+  return new Promise((resolve) => {
+    setTimeout(resolve, ms);
+  });
+}
+
+function isQuotaOrRateLimitError(message = '') {
+  const normalized = String(message).toLowerCase();
+  return (
+    normalized.includes('quota exceeded') ||
+    normalized.includes('rate limit') ||
+    normalized.includes('free_tier') ||
+    normalized.includes('please retry in')
+  );
+}
+
+function localWeatherLevel(step) {
+  if (step <= 9) return step >= 6 ? 2 : 1;
+  if (step <= 25) return step >= 18 ? 3 : 2;
+  if (step <= 38) return step >= 33 ? 4 : 3;
+  if (step <= 46) return step >= 43 ? 5 : 4;
+  return 5;
+}
+
+function buildLocalFallbackForecast(userInput) {
+  const event = userInput?.trim() || 'unspecified concern';
+
+  const templates = [
+    'Initial drizzle forms around: "{event}". Visibility remains theatrically acceptable.',
+    'Issued formal memo regarding "{event}" and then ignored it responsibly.',
+    'Forecast desk confirms gentle avoidance winds moving east-northeast.',
+    'A minor thought-cell develops and requests two additional overreactions.',
+    'Public advisory: pretending this is fine remains statistically popular.',
+    'Pressure drops whenever the phrase "{event}" is mentioned in passing.',
+    'Conditions upgrade to procedural concern with sporadic doom pockets.',
+    'Internal radar detects a repeating loop marked "I will handle this tomorrow."',
+    'Umbrella ineffective. Clipboard highly effective. Continue documenting.',
+    'Front intensifies: every neutral message now sounds legally threatening.',
+    'A dense squall of hypothetical consequences enters city limits.',
+    'Evidence board expanded to include three unrelated events from 2018.',
+    'Forecast notes increased tab-switch velocity and reduced decision traction.',
+    'Short bursts of optimism observed, followed by immediate policy reversal.',
+    'Wind shear introduces dramatic but unhelpful contingency planning.',
+    'Category 2 procrastination front now crossing all active to-do lists.',
+    'Mild thunder reported after opening, closing, and reopening the same draft.',
+    'Attention span scattered by crosswinds from "{event}".',
+    'Overthinking enters advisory stage; coffee no longer negotiates peace.',
+    'Satellite confirms unnecessary apology drafts multiplying rapidly.',
+    'Thunderstorm core forms over the phrase "What if they misunderstood?"',
+    'Residents advised to remain indoors and avoid reading old chats.',
+    'Barometer rises with each imagined worst-case interpretation.',
+    'Official map now labels this region: "probably fine, feels catastrophic."',
+    'Heavy cognition rainfall expected through early tomorrow.',
+    'Storm wall visible from all perspectives, including fictional ones.',
+    'Existential fog advisory issued by the Department of Internal Weather.',
+    'Audible rumbling identified as seven simultaneous inner monologues.',
+    'Forecast confidence: low. Dramatic confidence: extremely high.',
+    'Dread humidity reaches saturation across workplace and bedtime zones.',
+    'Public transit delayed by recurring thought: "I ruined everything."',
+    'All roads lead briefly to self-doubt boulevard, then loop back.',
+    'Visibility falls near zero whenever someone types "quick question".',
+    'Cognitive lightning strikes old memories without notice.',
+    'Severe spiral storm now considered structurally self-sustaining.',
+    'Existential fog deepens; map replaced with interpretive poetry.',
+    'Emergency channel repeats: breathe, hydrate, avoid second-guessing archives.',
+    'Winds carry rumors that everyone noticed "{event}" instantly.',
+    'Boundary alarms trigger: parallel universe appears suspiciously stable.',
+    'Critical dread cyclone now affecting forecasts through next fiscal quarter.',
+    'Sirens confirm maximum concern despite insufficient evidence.',
+    'Midnight dread hurricane forms eye directly over unfinished messages.',
+    'Containment team requests umbrellas, tea, and administrative mercy.',
+    'Outer bands produce relentless replay of social micro-incidents.',
+    'Infrastructure strained by repeated phrase: "I should have said it differently."',
+    'Final advisory drafted, redrafted, and ceremonially over-redrafted.',
+    'The heat death of the universe will resolve this. Forecast: cold and permanent.',
+  ];
+
+  const spiralSteps = templates.map((template, index) => {
+    const step = index + 1;
+    return {
+      step,
+      text: template.replace('{event}', event),
+      weatherLevel: localWeatherLevel(step),
+    };
+  });
+
+  return {
+    weatherCondition: 'Midnight Dread Hurricane',
+    weatherLevel: 5,
+    spiralSteps,
+    alternateSelf: {
+      headline: 'ALTERNATE UNIVERSE - CLEAR CONDITIONS',
+      bulletPoints: [
+        `The ${event} situation was handled in one calm reply.`,
+        'Inbox state: peaceful, audited, and surprisingly current.',
+        'Meals consumed on schedule with no existential side effects.',
+        'Sleep quality: excellent. Dreams filed and archived.',
+        'Dread index: 0.4. Bureaucratically acceptable.',
+      ],
+      weatherReport:
+        'Current conditions: clear. Visibility: excellent. Minor breeze of competence from the west.',
+    },
+    certificate: {
+      currentConditions: 'Midnight Dread Hurricane',
+      spiralDepth: 47,
+      anxietyBarometer: 94,
+      alternateSelfStatus: 'Thriving (confirmed by suspiciously tidy calendar)',
+      shortTermForecast: 'Overanalysis with periodic false breakthroughs',
+      tonightForecast: 'Light rumination, heavy dramatic narration',
+      longTermForecast: 'Uncertain. Highly cloudy. Forms have been submitted.',
+      officialAdvisory:
+        'The weather is internal and fully unionized. External umbrellas remain decorative but morale-positive.',
+    },
+  };
+}
+
+async function streamLocalFallbackForecast(userInput, callbacks, signal) {
+  const { onStep, onAlternateSelf, onCertificate, onComplete, onMeta } = callbacks;
+  const fallback = buildLocalFallbackForecast(userInput);
+
+  safeCallback(onMeta, { source: 'fallback', model: 'local-emergency-forecast' });
+
+  for (const step of fallback.spiralSteps) {
+    if (signal?.aborted) {
+      throw new DOMException('Forecast request aborted', 'AbortError');
+    }
+    safeCallback(onStep, step);
+    await sleep(36);
+  }
+
+  if (signal?.aborted) {
+    throw new DOMException('Forecast request aborted', 'AbortError');
+  }
+
+  safeCallback(onAlternateSelf, fallback.alternateSelf);
+  safeCallback(onCertificate, fallback.certificate);
+  safeCallback(onComplete, fallback);
+}
 
 function buildUserPrompt(userInput) {
   return `The triggering event is: "${userInput}"
@@ -43,7 +191,49 @@ Generate a complete forecast in this exact JSON:
     "longTermForecast": "...",
     "officialAdvisory": "Two sentence poetic advisory in weather broadcast tone."
   }
-}`;
+}
+
+Additional hard constraints:
+- Return ONLY valid JSON, no extra text.
+- spiralSteps must be exactly 47 entries.
+- Step 47 text must mention heat death of the universe.`;
+}
+
+function isValidStepObject(step) {
+  return (
+    Number.isInteger(step?.step) &&
+    Number.isInteger(step?.weatherLevel) &&
+    typeof step?.text === "string" &&
+    step.weatherLevel >= 1 &&
+    step.weatherLevel <= 5
+  );
+}
+
+function validateFinalForecastShape(forecast) {
+  const steps = forecast?.spiralSteps;
+  if (!Array.isArray(steps) || steps.length !== 47) {
+    return "Forecast must include exactly 47 spiral steps";
+  }
+
+  const hasInvalidStep = steps.some((step) => !isValidStepObject(step));
+  if (hasInvalidStep) {
+    return "Forecast contains malformed spiral step entries";
+  }
+
+  const step47 = steps.find((step) => step.step === 47);
+  if (!step47) {
+    return "Forecast is missing step 47";
+  }
+
+  if (step47.weatherLevel !== 5) {
+    return "Step 47 must have weatherLevel 5";
+  }
+
+  if (!/heat death of the universe/i.test(step47.text)) {
+    return "Step 47 must reference heat death of the universe";
+  }
+
+  return null;
 }
 
 function safeCallback(callback, ...args) {
@@ -207,7 +397,7 @@ function parseSseChunk(chunkText, onError) {
     if (parsed?.error) {
       const message = parsed.error.message || "Gemini API returned an error";
       safeCallback(onError, message);
-      return { text: "", hasError: true };
+      return { text: "", hasError: true, errorMessage: message };
     }
 
     const text = getTextFromSseEvent(parsed);
@@ -216,7 +406,7 @@ function parseSseChunk(chunkText, onError) {
     }
   }
 
-  return { text: textParts.join(""), hasError: false };
+  return { text: textParts.join(""), hasError: false, errorMessage: null };
 }
 
 function normalizeJsonEnvelope(raw) {
@@ -230,12 +420,14 @@ function normalizeJsonEnvelope(raw) {
 }
 
 async function streamForecast(userInput, callbacks = {}) {
-  const { onStep, onAlternateSelf, onCertificate, onError, onComplete } = callbacks;
-  const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
-
-  if (!apiKey) {
-    safeCallback(onError, "Missing Gemini API key: VITE_GEMINI_API_KEY");
+  const { onStep, onAlternateSelf, onCertificate, onError, onComplete, onMeta, signal } = callbacks;
+  if (!API_KEY) {
+    await streamLocalFallbackForecast(userInput, callbacks, signal);
     return;
+  }
+
+  if (signal?.aborted) {
+    throw new DOMException('Forecast request aborted', 'AbortError');
   }
 
   const userPrompt = buildUserPrompt(userInput);
@@ -256,12 +448,18 @@ async function streamForecast(userInput, callbacks = {}) {
     },
   };
 
-  const modelsToTry = ["gemini-2.0-flash-exp", "gemini-2.0-flash"];
+  const modelsToTry = [
+    "gemini-2.5-flash",
+    "gemini-2.0-flash",
+    "gemini-2.0-flash-001",
+    "gemini-2.0-flash-lite",
+    "gemini-2.0-flash-lite-001",
+  ];
   let response = null;
   let lastFailure = null;
 
   for (const model of modelsToTry) {
-    const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${model}:streamGenerateContent?alt=sse&key=${apiKey}`;
+    const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${model}:streamGenerateContent?alt=sse&key=${API_KEY}`;
     try {
       response = await fetch(endpoint, {
         method: "POST",
@@ -269,6 +467,7 @@ async function streamForecast(userInput, callbacks = {}) {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(requestBody),
+        signal,
       });
     } catch (error) {
       lastFailure = error;
@@ -277,14 +476,15 @@ async function streamForecast(userInput, callbacks = {}) {
     }
 
     if (response.ok) {
+      safeCallback(onMeta, { source: 'gemini', model });
       break;
     }
 
-    let errorMessage = `Gemini request failed with ${response.status}`;
+    let errorMessage = `Gemini request failed with ${response.status} on ${model}`;
     try {
       const maybeJson = await response.json();
       if (maybeJson?.error?.message) {
-        errorMessage = maybeJson.error.message;
+        errorMessage = `${maybeJson.error.message} (model: ${model})`;
       }
     } catch {
       // keep fallback message
@@ -296,6 +496,10 @@ async function streamForecast(userInput, callbacks = {}) {
 
   if (!response) {
     const message = lastFailure?.message || "Unable to reach Gemini API";
+    if (isQuotaOrRateLimitError(message)) {
+      await streamLocalFallbackForecast(userInput, callbacks, signal);
+      return;
+    }
     safeCallback(onError, message);
     return;
   }
@@ -317,7 +521,21 @@ async function streamForecast(userInput, callbacks = {}) {
   let emittedCertificate = false;
 
   try {
+    if (signal) {
+      signal.addEventListener(
+        'abort',
+        () => {
+          void reader.cancel('Forecast request aborted');
+        },
+        { once: true }
+      );
+    }
+
     while (true) {
+      if (signal?.aborted) {
+        throw new DOMException('Forecast request aborted', 'AbortError');
+      }
+
       const { done, value } = await reader.read();
       if (done) {
         break;
@@ -334,8 +552,11 @@ async function streamForecast(userInput, callbacks = {}) {
       const completeSsePart = sseRemainder.slice(0, lastNewline + 1);
       sseRemainder = sseRemainder.slice(lastNewline + 1);
 
-      const { text, hasError } = parseSseChunk(completeSsePart, onError);
+      const { text, hasError, errorMessage } = parseSseChunk(completeSsePart, onError);
       if (hasError) {
+        if (isQuotaOrRateLimitError(errorMessage)) {
+          await streamLocalFallbackForecast(userInput, callbacks, signal);
+        }
         return;
       }
 
@@ -412,8 +633,11 @@ async function streamForecast(userInput, callbacks = {}) {
     }
 
     if (sseRemainder.trim()) {
-      const { text, hasError } = parseSseChunk(sseRemainder, onError);
+      const { text, hasError, errorMessage } = parseSseChunk(sseRemainder, onError);
       if (hasError) {
+        if (isQuotaOrRateLimitError(errorMessage)) {
+          await streamLocalFallbackForecast(userInput, callbacks, signal);
+        }
         return;
       }
       fullTextBuffer += text;
@@ -431,6 +655,12 @@ async function streamForecast(userInput, callbacks = {}) {
       finalJson = JSON.parse(normalized);
     } catch {
       safeCallback(onError, "Unable to parse final JSON forecast");
+      return;
+    }
+
+    const validationError = validateFinalForecastShape(finalJson);
+    if (validationError) {
+      safeCallback(onError, validationError);
       return;
     }
 
@@ -453,6 +683,9 @@ async function streamForecast(userInput, callbacks = {}) {
 
     safeCallback(onComplete, finalJson);
   } catch (error) {
+    if (error?.name === 'AbortError') {
+      return;
+    }
     safeCallback(onError, error?.message || "Unexpected streaming error");
   } finally {
     reader.releaseLock();

@@ -1,0 +1,177 @@
+@import url('https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400;1,700&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+
+:root {
+  --bg-primary: #0A0E1A;
+  --bg-surface: #111827;
+  --bg-elevated: #1C2333;
+  --accent-teal: #4ADECC;
+  --accent-amber: #F59E0B;
+  --accent-red: #EF4444;
+  --accent-fog: #6B7280;
+  --text-primary: #F1F5F9;
+  --text-secondary: #94A3B8;
+  --text-muted: #475569;
+  --calm-cream: #FEF3C7;
+  --cert-cream: #F5F0E8;
+  --border: rgba(148, 163, 184, 0.12);
+  --font-mono: 'Space Mono', monospace;
+  --font-data: 'Courier Prime', monospace;
+  --font-serif: 'Playfair Display', serif;
+}
+
+body.theme-pink {
+  --bg-primary: #0F0508;
+  --bg-surface: #180C12;
+  --accent-teal: #FF1493;
+  --accent-amber: #FF69B4;
+  --accent-red: #C71585;
+  --text-primary: #FFB6C1;
+  --text-secondary: #FF85A1;
+}
+
+body.theme-sepia {
+  --bg-primary: #1A1410;
+  --bg-surface: #231C15;
+  --accent-teal: #B8860B;
+  --text-primary: #E8DCC8;
+  --text-secondary: #C4A882;
+}
+
+body.theme-void {
+  --bg-primary: #000000;
+  --bg-surface: #0A0A0A;
+  --accent-teal: #FFFFFF;
+  --text-primary: #CCCCCC;
+  --text-secondary: #888888;
+}
+
+body.theme-green {
+  --bg-primary: #001100;
+  --bg-surface: #001A00;
+  --accent-teal: #00FF00;
+  --text-primary: #00CC00;
+  --text-secondary: #008800;
+}
+
+body.mode-decrease-readability * {
+  font-size: 8px !important;
+  color: #1C1C1A !important;
+  text-shadow: none !important;
+  letter-spacing: -0.05em !important;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: var(--font-mono);
+  overflow-x: hidden;
+  /* Use fallback for crosshair if SVG missing */
+  cursor: url('/cursor.svg') 10 10, crosshair;
+}
+
+/* Texture overlays */
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 50; /* Ensure this is top overlay but pointer events none */
+  /* Grain overlay implemented with SVG filter applied via url or just background if filter is complex.
+     A simpler approach for SVG filter is to define it in index.html, or we use a base64 SVG here. */
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+  opacity: 0.02;
+}
+
+/* ANTI-VIBE-CODE GLOBAL RESETS */
+h1, h2, h3, h4, h5, h6 {
+  margin-top: 0;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+}
+
+/* All uppercase labels */
+.label-caps {
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+}
+
+/* Reusable class for CRT scanlines on broadcast panels */
+.crt-scanlines {
+  position: relative;
+}
+
+.crt-scanlines::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    to bottom,
+    transparent 0px,
+    transparent 2px,
+    rgba(0, 0, 0, 1) 3px
+  );
+  opacity: 0.04;
+  border-radius: inherit;
+  z-index: 10;
+}
+
+/* Panels/Modals get radius-12, inline elements get radius-4 */
+.panel {
+  background-color: var(--bg-surface);
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+}
+
+.inline-element {
+  border-radius: 4px;
+}
+
+/* Custom hover state for interactive elements */
+a, button {
+  cursor: url('/cursor.svg') 10 10, crosshair;
+  transition: all 0.2s ease;
+}
+
+a:hover, button:hover {
+  /* No generic opacity-50, custom intentional changes */
+  filter: brightness(1.2);
+}
+
+/* Radar Rings */
+.radar-ring {
+  border: 0.5px solid var(--accent-teal);
+  opacity: 0.08;
+  border-radius: 50%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+/* Radiate animation for LiveDot */
+@keyframes radiate {
+  0% {
+    box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 6px rgba(239, 68, 68, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(239, 68, 68, 0);
+  }
+}

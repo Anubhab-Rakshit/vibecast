@@ -38,7 +38,7 @@ const StationScreen = ({ onSubmit }) => {
   const [fakeProgress, setFakeProgress] = useState(0);
   const [fakeProgressStatus, setFakeProgressStatus] = useState('Calibrating existential dread...');
   
-  const [showBanner, setShowBanner] = useState(true);
+  const [showBanner, setShowBanner] = useState(!isMobileViewport);
 
   // Typewriter placeholder logic
   const placeholders = [
@@ -166,11 +166,11 @@ const StationScreen = ({ onSubmit }) => {
       {/* The Oracle Label */}
       <div style={{
         position: 'absolute',
-        bottom: isMobileViewport ? '31%' : '22%',
+        bottom: isMobileViewport ? '37%' : '22%',
         left: '50%',
         transform: 'translateX(-50%)',
         width: isMobileViewport ? 'calc(100vw - 28px)' : '560px',
-        zIndex: 20,
+        zIndex: 120,
         textAlign: 'center',
       }}>
         <motion.div variants={itemVariants}>
@@ -197,14 +197,14 @@ const StationScreen = ({ onSubmit }) => {
       {/* Input Terminal */}
       <div style={{
         position: 'absolute',
-        bottom: isMobileViewport ? '22%' : '15%',
+        bottom: isMobileViewport ? '28%' : '15%',
         left: '50%',
         transform: 'translateX(-50%)',
         width: isMobileViewport ? 'calc(100vw - 28px)' : '560px',
-        zIndex: 20
+        zIndex: 120
       }}>
         <motion.div variants={itemVariants}>
-          <form onSubmit={handleSubmit} style={{ display: 'flex', alignItems: 'center', borderBottom: isFocused ? '1px solid var(--teal)' : '1px solid var(--text-dim)', transition: 'border-color 0.25s ease, box-shadow 0.25s ease', boxShadow: isFocused ? '0 4px 30px rgba(74,222,204,0.12)' : 'none' }}>
+          <form onSubmit={handleSubmit} style={{ display: 'flex', alignItems: 'center', borderBottom: isFocused ? '1px solid var(--teal)' : '1px solid var(--text-dim)', transition: 'border-color 0.25s ease, box-shadow 0.25s ease', boxShadow: isFocused ? '0 4px 30px rgba(74,222,204,0.12)' : 'none', backgroundColor: isMobileViewport ? 'rgba(8,12,20,0.7)' : 'transparent', padding: isMobileViewport ? '8px 10px' : '0 0', borderRadius: isMobileViewport ? '6px' : '0' }}>
             <span style={{ color: 'var(--teal)', marginRight: '12px', fontFamily: 'var(--font-mono)', fontSize: '14px', animation: 'blink 1s step-end infinite' }}>█</span>
             <input
               type="text"
@@ -299,6 +299,7 @@ const StationScreen = ({ onSubmit }) => {
       </motion.div>
 
       {/* USELESS FEATURE 1: Panic Button */}
+      {!isMobileViewport && (
       <div style={{ position: 'absolute', bottom: isMobileViewport ? '106px' : '64px', left: '16px', zIndex: 30 }}>
         <button
           onClick={(e) => {
@@ -328,8 +329,10 @@ const StationScreen = ({ onSubmit }) => {
           [ {panicTexts[panicState]} ]
         </button>
       </div>
+      )}
 
       {/* USELESS FEATURE 2: Fake Loading Bar */}
+      {!isMobileViewport && (
       <div style={{
         position: 'absolute',
         bottom: isMobileViewport ? '16%' : '8%',
@@ -346,8 +349,10 @@ const StationScreen = ({ onSubmit }) => {
           <div style={{ width: `${Math.min(fakeProgress, 100)}%`, height: '100%', backgroundColor: 'var(--teal)', transition: 'width 0.3s ease' }} />
         </div>
       </div>
+      )}
 
       {/* USELESS FEATURE 3: Accept Fate Cookie Banner */}
+      {!isMobileViewport && (
       <AnimatePresence>
         {showBanner && (
           <motion.div
@@ -397,6 +402,7 @@ const StationScreen = ({ onSubmit }) => {
           </motion.div>
         )}
       </AnimatePresence>
+      )}
     </motion.div>
   );
 };

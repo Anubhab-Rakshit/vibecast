@@ -4,6 +4,7 @@ import LiveDot from './LiveDot';
 import WeatherBadge from './WeatherBadge';
 
 const prefersReducedMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+const isMobileViewport = window.matchMedia?.('(max-width: 900px)').matches;
 
 const TypewriterText = ({ text }) => {
   const [displayed, setDisplayed] = useState('');
@@ -106,11 +107,16 @@ const SpiralFeed = ({ steps = [], currentLevel = 1 }) => {
       animate={{ x: 0, opacity: 1 }}
       transition={{ duration: prefersReducedMotion ? 0 : 0.6, ease: [0.22, 1, 0.36, 1] }}
       style={{
-        position: 'fixed', right: 0, top: 0, bottom: 0,
-        width: 'min(340px, 90vw)', maxWidth: '340px',
+        position: 'fixed',
+        right: 0,
+        top: isMobileViewport ? '58%' : 0,
+        bottom: 0,
+        width: isMobileViewport ? '100vw' : 'min(340px, 90vw)',
+        maxWidth: isMobileViewport ? '100vw' : '340px',
         backgroundColor: 'rgba(8,12,20,0.92)',
         backdropFilter: 'blur(8px)',
-        borderLeft: `1px solid ${borderColor}`,
+        borderLeft: isMobileViewport ? 'none' : `1px solid ${borderColor}`,
+        borderTop: isMobileViewport ? `1px solid ${borderColor}` : 'none',
         transition: 'border-left-color 1s ease',
         display: 'flex', flexDirection: 'column', zIndex: 40
       }}
@@ -146,7 +152,7 @@ const SpiralFeed = ({ steps = [], currentLevel = 1 }) => {
       </div>
 
       {/* Feed */}
-      <div ref={containerRef} style={{ flex: 1, overflowY: 'auto', paddingBottom: '80px', scrollBehavior: 'smooth' }}>
+        <div ref={containerRef} style={{ flex: 1, overflowY: 'auto', paddingBottom: isMobileViewport ? '56px' : '80px', scrollBehavior: 'smooth' }}>
         {steps.map((step, index) => (
           <FeedItem
             key={step.step || index}

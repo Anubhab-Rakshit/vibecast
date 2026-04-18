@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const prefersReducedMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+const isMobileViewport = window.matchMedia?.('(max-width: 900px)').matches;
 
 const WeatherClassification = ({ level = 1 }) => {
   const [prevLevel, setPrevLevel] = useState(level);
@@ -22,7 +23,7 @@ const WeatherClassification = ({ level = 1 }) => {
   if (level >= 5) { name = "CATEGORY 5 MIDNIGHT DREAD HURRICANE"; color = 'var(--red)'; }
 
   return (
-    <div style={{ position: 'absolute', left: '48px', top: '96px', width: '280px', zIndex: 30 }}>
+    <div style={{ position: 'absolute', left: isMobileViewport ? '14px' : '48px', top: isMobileViewport ? '82px' : '96px', width: isMobileViewport ? 'calc(100vw - 28px)' : '280px', zIndex: 30 }}>
       <motion.div
         initial={{ opacity: 0, y: -8 }}
         animate={{ opacity: 1, y: 0 }}
@@ -35,7 +36,7 @@ const WeatherClassification = ({ level = 1 }) => {
           CURRENT CONDITIONS
         </div>
 
-        <div style={{ position: 'relative', height: '80px', overflow: 'hidden' }}>
+        <div style={{ position: 'relative', height: isMobileViewport ? '52px' : '80px', overflow: 'hidden' }}>
           <AnimatePresence mode="wait">
             <motion.div
               key={animKey}

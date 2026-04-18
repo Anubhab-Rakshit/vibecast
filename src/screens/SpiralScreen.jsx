@@ -7,6 +7,7 @@ import WeatherClassification from '../components/WeatherClassification';
 import ForecastBar from '../components/ForecastBar';
 
 const prefersReducedMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+const isMobileViewport = window.matchMedia?.('(max-width: 900px)').matches;
 
 const SpiralScreen = ({
   steps = [],
@@ -42,7 +43,7 @@ const SpiralScreen = ({
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: prefersReducedMotion ? 0 : 0.6, ease: [0.22, 1, 0.36, 1] }}
         >
-          <RadarFrameScrub mode="controlled" currentStep={stepCount} totalSteps={47} size={520} />
+          <RadarFrameScrub mode="controlled" currentStep={stepCount} totalSteps={47} size={isMobileViewport ? 300 : 520} />
         </motion.div>
       </div>
 

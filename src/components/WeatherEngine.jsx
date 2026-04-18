@@ -78,7 +78,7 @@ const RainEffect = () => {
   return (
     <motion.div
       initial={{ opacity: 0 }}
-      animate={{ opacity: 1, backgroundColor: 'rgba(5, 8, 15, 0.8)' }}
+      animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 1.5 }}
       style={{ position: 'absolute', inset: 0, zIndex: 1, pointerEvents: 'none' }}
@@ -163,16 +163,16 @@ const StormEffect = () => {
     <motion.div
       ref={containerRef}
       initial={{ opacity: 0 }}
-      animate={{ opacity: 1, backgroundColor: 'rgba(5, 8, 15, 0.9)' }}
+      animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 1.5 }}
       style={{ position: 'absolute', inset: 0, zIndex: 1, pointerEvents: 'none' }}
     >
-      {/* Heavy Rain Overlay (Reusing Rain Canvas logic but faster/denser could go here, for now using a dark moody gradient overlay) */}
+      {/* Heavy Rain Overlay */}
       <div style={{
         position: 'absolute',
         inset: 0,
-        background: 'linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.8) 100%)',
+        background: 'linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.6) 100%)',
       }} />
     </motion.div>
   );

@@ -2,6 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 
 const prefersReducedMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+const isMobileViewport = window.matchMedia?.('(max-width: 900px)').matches;
 
 const ForecastBar = ({ step = 0 }) => {
   if (step <= 10) return null;
@@ -18,13 +19,16 @@ const ForecastBar = ({ step = 0 }) => {
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: prefersReducedMotion ? 0 : 0.5, ease: [0.22, 1, 0.36, 1] }}
       style={{
-        position: 'fixed', bottom: 0, left: 0, width: '100vw', height: '44px',
+        position: 'fixed', bottom: isMobileViewport ? '52px' : 0, left: 0, width: '100vw', height: isMobileViewport ? '38px' : '44px',
         backgroundColor: 'var(--bg-void)', borderTop: '0.5px solid var(--border-subtle)',
         display: 'flex', alignItems: 'center', justifyContent: 'center',
-        gap: '24px', zIndex: 50
+        gap: isMobileViewport ? '10px' : '24px', zIndex: 50,
+        overflowX: 'auto',
+        whiteSpace: 'nowrap',
+        padding: isMobileViewport ? '0 12px' : '0',
       }}
     >
-      <div style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', color: 'var(--text-mid)', textTransform: 'uppercase' }}>
+      <div style={{ fontFamily: 'var(--font-mono)', fontSize: isMobileViewport ? '9px' : '10px', color: 'var(--text-mid)', textTransform: 'uppercase' }}>
         ANXIETY DEPTH:{' '}
         <motion.span
           animate={{ opacity: 1 }}
@@ -35,12 +39,12 @@ const ForecastBar = ({ step = 0 }) => {
         </motion.span>
       </div>
       <div style={{ color: 'var(--border-subtle)' }}>|</div>
-      <div style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', color: careerColor, textTransform: 'uppercase', transition: 'color 0.5s' }}>
+      <div style={{ fontFamily: 'var(--font-mono)', fontSize: isMobileViewport ? '9px' : '10px', color: careerColor, textTransform: 'uppercase', transition: 'color 0.5s' }}>
         CAREER CONCERNS: {careerText}
       </div>
       <div style={{ color: 'var(--border-subtle)' }}>|</div>
       <div style={{
-        fontFamily: 'var(--font-mono)', fontSize: '10px', color: cosmicColor,
+        fontFamily: 'var(--font-mono)', fontSize: isMobileViewport ? '9px' : '10px', color: cosmicColor,
         textTransform: 'uppercase', transition: 'color 0.5s',
         animation: step > 40 ? 'blink 0.5s infinite' : 'none'
       }}>

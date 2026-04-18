@@ -5,6 +5,7 @@ import RadarDisplay from '../components/RadarDisplay';
 import FloatingDust from '../components/FloatingDust';
 
 const prefersReducedMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+const isMobileViewport = window.matchMedia?.('(max-width: 900px)').matches;
 
 const FALLBACK_BULLETS = [
   "Email replied to in 4 minutes. Inbox: zero.",
@@ -94,11 +95,11 @@ const BoundaryScreen = ({ onAcceptFate, alternateSelf, forecastSource = 'pending
   const sourceTone = forecastSource === 'fallback' ? '#B45309' : '#0F766E';
 
   return (
-    <div style={{ width: '100vw', height: '100vh', display: 'flex', overflow: 'hidden', position: 'relative' }}>
+    <div style={{ width: '100vw', height: '100vh', display: 'flex', flexDirection: isMobileViewport ? 'column' : 'row', overflow: 'hidden', position: 'relative' }}>
 
       {/* ─── LEFT HALF: YOUR UNIVERSE ─── */}
       <div ref={leftRef} style={{
-        width: '50vw', height: '100vh', position: 'relative',
+        width: isMobileViewport ? '100vw' : '50vw', height: isMobileViewport ? '50vh' : '100vh', position: 'relative',
         backgroundColor: 'var(--bg-deep)',
         willChange: 'transform',
       }}>
@@ -133,17 +134,17 @@ const BoundaryScreen = ({ onAcceptFate, alternateSelf, forecastSource = 'pending
         </div>
 
         {/* Mini Radar */}
-        <div ref={el => leftRef_item(el, 1)} style={{ position: 'absolute', top: '40%', left: '50%', transform: 'translate(-50%, -50%)', zIndex: 5 }}>
-          <RadarDisplay size={160} stormProgress={1} isLevel5={true} />
+        <div ref={el => leftRef_item(el, 1)} style={{ position: 'absolute', top: isMobileViewport ? '44%' : '40%', left: '50%', transform: 'translate(-50%, -50%)', zIndex: 5 }}>
+          <RadarDisplay size={isMobileViewport ? 120 : 160} stormProgress={1} isLevel5={true} />
         </div>
 
         {/* Scrolling steps */}
         <div ref={el => leftRef_item(el, 2)} style={{
-          position: 'absolute', top: '65%', left: '50%', transform: 'translateX(-50%)',
-          height: '100px', overflow: 'hidden', zIndex: 5,
+          position: 'absolute', top: isMobileViewport ? '62%' : '65%', left: '50%', transform: 'translateX(-50%)',
+          height: isMobileViewport ? '76px' : '100px', overflow: 'hidden', zIndex: 5,
           maskImage: 'linear-gradient(to bottom, transparent, black 20%, black 80%, transparent)'
         }}>
-          <div style={{ animation: 'scroll-up-steps 12s linear infinite', fontFamily: 'var(--font-mono)', fontSize: '9px', color: 'var(--text-ghost)', whiteSpace: 'nowrap', textAlign: 'center', lineHeight: 2 }}>
+          <div style={{ animation: 'scroll-up-steps 12s linear infinite', fontFamily: 'var(--font-mono)', fontSize: isMobileViewport ? '8px' : '9px', color: 'var(--text-ghost)', whiteSpace: 'nowrap', textAlign: 'center', lineHeight: 2 }}>
             step 40: What if I replied to the wrong thread?<br/>
             step 41: I definitely replied to the wrong thread.<br/>
             step 42: I should fake my own death.<br/>
@@ -157,7 +158,7 @@ const BoundaryScreen = ({ onAcceptFate, alternateSelf, forecastSource = 'pending
         </div>
 
         {/* Weather Readout */}
-        <div ref={el => leftRef_item(el, 3)} style={{ position: 'absolute', bottom: '88px', left: '32px', fontFamily: 'var(--font-mono)', fontSize: '10px', color: 'var(--red)', lineHeight: 1.5, zIndex: 5 }}>
+        <div ref={el => leftRef_item(el, 3)} style={{ position: 'absolute', bottom: isMobileViewport ? '52px' : '88px', left: '32px', fontFamily: 'var(--font-mono)', fontSize: isMobileViewport ? '8px' : '10px', color: 'var(--red)', lineHeight: 1.5, zIndex: 5 }}>
           CATEGORY 5 MIDNIGHT DREAD HURRICANE<br/>
           VISIBILITY: ZERO
         </div>
@@ -165,22 +166,22 @@ const BoundaryScreen = ({ onAcceptFate, alternateSelf, forecastSource = 'pending
 
       {/* ─── RIGHT HALF: ALTERNATE UNIVERSE ─── */}
       <div ref={rightRef} style={{
-        width: '50vw', height: '100vh', position: 'relative',
+        width: isMobileViewport ? '100vw' : '50vw', height: isMobileViewport ? '50vh' : '100vh', position: 'relative',
         background: 'radial-gradient(circle at center, #FFF8DB 0%, #FEF3C7 100%)',
         willChange: 'transform',
       }}>
         <FloatingDust />
 
         {/* Top Label */}
-        <div ref={el => rightRef_item(el, 0)} className="label-caps" style={{ position: 'absolute', top: 0, left: 0, padding: '24px', fontSize: '9px', color: '#92400E', letterSpacing: '0.12em' }}>
+        <div ref={el => rightRef_item(el, 0)} className="label-caps" style={{ position: 'absolute', top: 0, left: 0, padding: isMobileViewport ? '14px 16px' : '24px', fontSize: '9px', color: '#92400E', letterSpacing: '0.12em', maxWidth: '100%', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
           {liveHeadline}
         </div>
 
         <div
           style={{
             position: 'absolute',
-            top: '56px',
-            left: '24px',
+            top: isMobileViewport ? '38px' : '56px',
+            left: isMobileViewport ? '16px' : '24px',
             border: `1px solid ${sourceTone}`,
             backgroundColor: 'rgba(255,255,255,0.55)',
             borderRadius: '999px',
@@ -200,7 +201,7 @@ const BoundaryScreen = ({ onAcceptFate, alternateSelf, forecastSource = 'pending
         </div>
 
         {/* Sun icon */}
-        <div ref={el => rightRef_item(el, 1)} style={{ position: 'absolute', top: '22%', left: '50%', transform: 'translateX(-50%)' }}>
+        <div ref={el => rightRef_item(el, 1)} style={{ position: 'absolute', top: isMobileViewport ? '24%' : '22%', left: '50%', transform: 'translateX(-50%)' }}>
           <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
             <circle cx="20" cy="20" r="8" fill="#D97706" />
             {[0, 45, 90, 135, 180, 225, 270, 315].map((angle) => (
@@ -210,7 +211,7 @@ const BoundaryScreen = ({ onAcceptFate, alternateSelf, forecastSource = 'pending
         </div>
 
         {/* Bullet Points — real data from API or fallback */}
-        <div style={{ position: 'absolute', top: '34%', left: '50%', transform: 'translateX(-50%)', width: '80%' }}>
+        <div style={{ position: 'absolute', top: isMobileViewport ? '37%' : '34%', left: '50%', transform: 'translateX(-50%)', width: '84%' }}>
           <div
             style={{
               marginBottom: '10px',
@@ -232,12 +233,12 @@ const BoundaryScreen = ({ onAcceptFate, alternateSelf, forecastSource = 'pending
         </div>
 
         {/* Stats + weather report */}
-        <div ref={el => rightRef_item(el, 7)} style={{ position: 'absolute', bottom: '180px', left: '50%', transform: 'translateX(-50%)', width: '80%', fontFamily: 'var(--font-mono)', fontSize: '11px', color: '#78716C', lineHeight: 1.6 }}>
+        <div ref={el => rightRef_item(el, 7)} style={{ position: 'absolute', bottom: isMobileViewport ? '116px' : '180px', left: '50%', transform: 'translateX(-50%)', width: '84%', fontFamily: 'var(--font-mono)', fontSize: isMobileViewport ? '10px' : '11px', color: '#78716C', lineHeight: 1.5 }}>
           {liveWeatherReport}
         </div>
 
         {/* Accept Fate button — inside right panel, below stats */}
-        <div ref={el => rightRef_item(el, 8)} style={{ position: 'absolute', bottom: '96px', left: '50%', transform: 'translateX(-50%)', width: '80%' }}>
+        <div ref={el => rightRef_item(el, 8)} style={{ position: 'absolute', bottom: isMobileViewport ? '56px' : '96px', left: '50%', transform: 'translateX(-50%)', width: '84%' }}>
           <motion.button
             onClick={onAcceptFate}
             whileHover={prefersReducedMotion ? {} : { backgroundColor: '#44403C', color: '#FEF3C7', borderColor: '#44403C' }}
@@ -260,10 +261,16 @@ const BoundaryScreen = ({ onAcceptFate, alternateSelf, forecastSource = 'pending
 
       {/* ─── THE WAVY BOUNDARY ─── */}
       <div ref={boundaryRef} style={{
-        position: 'absolute', left: '50%', top: 0, height: '100vh',
-        width: '2px', zIndex: 20, transform: 'translateX(-50%)', pointerEvents: 'none'
+        position: 'absolute',
+        left: isMobileViewport ? 0 : '50%',
+        top: isMobileViewport ? '50%' : 0,
+        height: isMobileViewport ? '2px' : '100vh',
+        width: isMobileViewport ? '100vw' : '2px',
+        zIndex: 20,
+        transform: isMobileViewport ? 'translateY(-50%)' : 'translateX(-50%)',
+        pointerEvents: 'none'
       }}>
-        <svg height="100%" width="80" style={{ position: 'absolute', left: '-40px', top: 0 }} preserveAspectRatio="none">
+        <svg height={isMobileViewport ? '80' : '100%'} width={isMobileViewport ? '100%' : '80'} style={{ position: 'absolute', left: isMobileViewport ? 0 : '-40px', top: isMobileViewport ? '-40px' : 0 }} preserveAspectRatio="none">
           <path id="boundary-path" d="M 40 0 C 80 250, 0 500, 40 750 C 80 1000, 0 1250, 40 1500"
             fill="none" stroke="rgba(239,68,68,0.08)" strokeWidth="12" filter="blur(6px)" />
           <path d="M 40 0 C 80 250, 0 500, 40 750 C 80 1000, 0 1250, 40 1500"
@@ -273,7 +280,7 @@ const BoundaryScreen = ({ onAcceptFate, alternateSelf, forecastSource = 'pending
         </svg>
         <div style={{
           position: 'absolute', top: '50%', left: '50%',
-          transform: 'translate(-50%, -50%) rotate(-90deg)',
+          transform: isMobileViewport ? 'translate(-50%, -50%)' : 'translate(-50%, -50%) rotate(-90deg)',
           fontFamily: 'var(--font-mono)', fontSize: '7px', color: 'var(--text-ghost)', whiteSpace: 'nowrap'
         }}>
           UNIVERSE BOUNDARY

@@ -5,6 +5,7 @@ import ParticleCanvas from '../components/ParticleCanvas';
 import ScrambleText from '../components/ScrambleText';
 
 const prefersReducedMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+const isMobileViewport = window.matchMedia?.('(max-width: 900px)').matches;
 
 // Stagger container for the hero elements
 const containerVariants = {
@@ -109,12 +110,12 @@ const StationScreen = ({ onSubmit }) => {
       {/* Giant Bleeding Masthead — rotated, properly left-anchored */}
       <div style={{
         position: 'absolute',
-        left: '7vw',
+        left: isMobileViewport ? '12vw' : '7vw',
         top: '50%',
         // translate(-50%, -50%) ensures the true center of the word is at left:4vw, top:50%
         transform: 'translate(-50%, -50%) rotate(-90deg)',
         fontFamily: 'var(--font-mono)',
-        fontSize: '18vw',
+        fontSize: isMobileViewport ? '24vw' : '18vw',
         fontWeight: '900',
         color: 'var(--bg-elevated)',
         opacity: 0.4,
@@ -129,18 +130,18 @@ const StationScreen = ({ onSubmit }) => {
       </div>
 
       {/* Corner Data Overlays — shifted down to clear HUD */}
-      <div style={{ position: 'absolute', top: '120px', left: '32px', zIndex: 20, fontFamily: 'var(--font-mono)', fontSize: '10px', color: 'var(--text-ghost)', lineHeight: 1.5 }}>
+      <div style={{ position: 'absolute', top: isMobileViewport ? '86px' : '120px', left: '16px', zIndex: 20, fontFamily: 'var(--font-mono)', fontSize: isMobileViewport ? '8px' : '10px', color: 'var(--text-ghost)', lineHeight: 1.5 }}>
         <ScrambleText text="STATION ID: NMW-47" /><br/>
         UTC: {new Date().toISOString().split('T')[1].substring(0, 8)}
       </div>
-      <div style={{ position: 'absolute', top: '120px', right: '32px', zIndex: 20, fontFamily: 'var(--font-mono)', fontSize: '10px', color: 'var(--text-ghost)', lineHeight: 1.5, textAlign: 'right' }}>
+      <div style={{ position: 'absolute', top: isMobileViewport ? '86px' : '120px', right: '16px', zIndex: 20, fontFamily: 'var(--font-mono)', fontSize: isMobileViewport ? '8px' : '10px', color: 'var(--text-ghost)', lineHeight: 1.5, textAlign: 'right' }}>
         <ScrambleText text="STORM CLASS: STANDBY" /><br/>
         COORD: 28°36'N 77°13'E
       </div>
-      <div style={{ position: 'absolute', bottom: '32px', left: '32px', zIndex: 20, fontFamily: 'var(--font-mono)', fontSize: '10px', color: 'var(--text-ghost)', lineHeight: 1.5 }}>
+      <div style={{ position: 'absolute', bottom: isMobileViewport ? '84px' : '32px', left: '16px', zIndex: 20, fontFamily: 'var(--font-mono)', fontSize: isMobileViewport ? '8px' : '10px', color: 'var(--text-ghost)', lineHeight: 1.5 }}>
         <ScrambleText text="ATMOSPHERIC INTEGRITY: 94.3%" />
       </div>
-      <div style={{ position: 'absolute', bottom: '32px', right: '32px', zIndex: 20, fontFamily: 'var(--font-mono)', fontSize: '10px', color: 'var(--text-ghost)', lineHeight: 1.5, textAlign: 'right' }}>
+      <div style={{ position: 'absolute', bottom: isMobileViewport ? '84px' : '32px', right: '16px', zIndex: 20, fontFamily: 'var(--font-mono)', fontSize: isMobileViewport ? '8px' : '10px', color: 'var(--text-ghost)', lineHeight: 1.5, textAlign: 'right' }}>
         <span style={{ border: '1px solid var(--border-mid)', padding: '2px 6px', borderRadius: '2px' }}>
           <ScrambleText text="CLASS: UNRESOLVED" />
         </span>
@@ -158,24 +159,24 @@ const StationScreen = ({ onSubmit }) => {
         }}
       >
         <motion.div variants={radarVariants}>
-          <RadarDisplay size={520} stormProgress={0} />
+          <RadarDisplay size={isMobileViewport ? 300 : 520} stormProgress={0} />
         </motion.div>
       </div>
 
       {/* The Oracle Label */}
       <div style={{
         position: 'absolute',
-        bottom: '22%',
+        bottom: isMobileViewport ? '31%' : '22%',
         left: '50%',
         transform: 'translateX(-50%)',
-        width: '560px',
+        width: isMobileViewport ? 'calc(100vw - 28px)' : '560px',
         zIndex: 20,
         textAlign: 'center',
       }}>
         <motion.div variants={itemVariants}>
           <div style={{
             fontFamily: 'var(--font-mono)',
-            fontSize: '9px',
+            fontSize: isMobileViewport ? '8px' : '9px',
             color: 'var(--text-dim)',
             letterSpacing: '0.18em',
             marginBottom: '4px'
@@ -184,7 +185,7 @@ const StationScreen = ({ onSubmit }) => {
           </div>
           <div style={{
             fontFamily: 'var(--font-mono)',
-            fontSize: '9px',
+            fontSize: isMobileViewport ? '8px' : '9px',
             color: 'var(--text-dim)',
             marginBottom: '8px'
           }}>
@@ -196,10 +197,10 @@ const StationScreen = ({ onSubmit }) => {
       {/* Input Terminal */}
       <div style={{
         position: 'absolute',
-        bottom: '15%',
+        bottom: isMobileViewport ? '22%' : '15%',
         left: '50%',
         transform: 'translateX(-50%)',
-        width: '560px',
+        width: isMobileViewport ? 'calc(100vw - 28px)' : '560px',
         zIndex: 20
       }}>
         <motion.div variants={itemVariants}>
@@ -231,8 +232,8 @@ const StationScreen = ({ onSubmit }) => {
       {/* GO Button — spring scale on mount */}
       <div style={{
         position: 'fixed',
-        bottom: '96px',
-        right: '48px',
+        bottom: isMobileViewport ? '104px' : '96px',
+        right: isMobileViewport ? '16px' : '48px',
         zIndex: 30,
         display: 'flex',
         flexDirection: 'column',
@@ -254,13 +255,13 @@ const StationScreen = ({ onSubmit }) => {
           whileTap={prefersReducedMotion ? {} : { scale: 0.88 }}
           transition={{ type: 'spring', stiffness: 400, damping: 20 }}
           style={{
-            width: '64px',
-            height: '64px',
+            width: isMobileViewport ? '56px' : '64px',
+            height: isMobileViewport ? '56px' : '64px',
             borderRadius: '50%',
             backgroundColor: 'var(--red)',
             color: 'white',
             fontFamily: 'var(--font-mono)',
-            fontSize: '14px',
+            fontSize: isMobileViewport ? '12px' : '14px',
             fontWeight: 'bold',
             border: '2px solid rgba(255,255,255,0.15)',
             cursor: 'pointer',
@@ -281,21 +282,24 @@ const StationScreen = ({ onSubmit }) => {
         transition={{ duration: 1.5, delay: 0.8 }}
         style={{
           position: 'fixed',
-          bottom: '56px',
+          bottom: isMobileViewport ? '70px' : '56px',
           left: '50%',
           transform: 'translateX(-50%)',
           fontFamily: 'var(--font-mono)',
-          fontSize: '9px',
+          fontSize: isMobileViewport ? '8px' : '9px',
           color: 'var(--text-ghost)',
           zIndex: 5,
-          whiteSpace: 'nowrap'
+          whiteSpace: 'nowrap',
+          maxWidth: 'calc(100vw - 24px)',
+          overflow: 'hidden',
+          textOverflow: 'ellipsis'
         }}
       >
         <ScrambleText text="VibeCast Live Desk | Est. whenever you started procrastinating" />
       </motion.div>
 
       {/* USELESS FEATURE 1: Panic Button */}
-      <div style={{ position: 'absolute', bottom: '64px', left: '32px', zIndex: 30 }}>
+      <div style={{ position: 'absolute', bottom: isMobileViewport ? '106px' : '64px', left: '16px', zIndex: 30 }}>
         <button
           onClick={(e) => {
             e.preventDefault();
@@ -328,10 +332,10 @@ const StationScreen = ({ onSubmit }) => {
       {/* USELESS FEATURE 2: Fake Loading Bar */}
       <div style={{
         position: 'absolute',
-        bottom: '8%',
+        bottom: isMobileViewport ? '16%' : '8%',
         left: '50%',
         transform: 'translateX(-50%)',
-        width: '560px',
+        width: isMobileViewport ? 'calc(100vw - 28px)' : '560px',
         zIndex: 20
       }}>
         <div style={{ fontFamily: 'var(--font-mono)', fontSize: '8px', color: 'var(--text-dim)', marginBottom: '4px', display: 'flex', justifyContent: 'space-between' }}>
@@ -358,22 +362,24 @@ const StationScreen = ({ onSubmit }) => {
               right: '0',
               backgroundColor: '#0a0d14', // Match elevated background
               borderTop: '1px solid var(--border-mid)',
-              padding: '12px 32px',
+              padding: isMobileViewport ? '10px 12px' : '12px 32px',
               zIndex: 9999,
               display: 'flex',
+              flexDirection: isMobileViewport ? 'column' : 'row',
               justifyContent: 'space-between',
-              alignItems: 'center',
+              alignItems: isMobileViewport ? 'flex-start' : 'center',
+              gap: isMobileViewport ? '10px' : '0',
               fontFamily: 'var(--font-mono)',
-              fontSize: '10px'
+              fontSize: isMobileViewport ? '9px' : '10px'
             }}
           >
             <div style={{ color: 'var(--text-ghost)' }}>
               NOTICE: We use cookies to track how much time you are wasting. By clicking 'Accept', you agree that it is officially too late to start that task today.
             </div>
-            <div style={{ display: 'flex', gap: '8px' }}>
+            <div style={{ display: 'flex', gap: '8px', width: isMobileViewport ? '100%' : 'auto' }}>
               <button 
                 onClick={() => setShowBanner(false)} 
-                style={{ backgroundColor: 'transparent', color: 'var(--text-muted)', border: '1px solid var(--border-mid)', padding: '6px 12px', cursor: 'pointer', fontSize: '9px', fontFamily: 'var(--font-mono)' }}
+                style={{ backgroundColor: 'transparent', color: 'var(--text-muted)', border: '1px solid var(--border-mid)', padding: '6px 12px', cursor: 'pointer', fontSize: '9px', fontFamily: 'var(--font-mono)', flex: isMobileViewport ? 1 : 'unset' }}
                 onMouseEnter={(e) => { e.target.style.color = 'var(--text-primary)'; e.target.style.borderColor = 'var(--text-muted)'; }}
                 onMouseLeave={(e) => { e.target.style.color = 'var(--text-muted)'; e.target.style.borderColor = 'var(--border-mid)'; }}
               >
@@ -381,7 +387,7 @@ const StationScreen = ({ onSubmit }) => {
               </button>
               <button 
                 onClick={() => setShowBanner(false)} 
-                style={{ backgroundColor: 'var(--accent-red)', color: 'white', border: '1px solid var(--accent-red)', padding: '6px 12px', cursor: 'pointer', fontSize: '9px', fontFamily: 'var(--font-mono)' }}
+                style={{ backgroundColor: 'var(--accent-red)', color: 'white', border: '1px solid var(--accent-red)', padding: '6px 12px', cursor: 'pointer', fontSize: '9px', fontFamily: 'var(--font-mono)', flex: isMobileViewport ? 1 : 'unset' }}
                 onMouseEnter={(e) => { e.target.style.boxShadow = '0 0 10px rgba(239,68,68,0.5)'; }}
                 onMouseLeave={(e) => { e.target.style.boxShadow = 'none'; }}
               >

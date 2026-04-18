@@ -5,6 +5,7 @@ import html2canvas from 'html2canvas';
 import { jsPDF } from 'jspdf';
 
 const prefersReducedMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+const isMobileViewport = window.matchMedia?.('(max-width: 900px)').matches;
 
 // The dot leader row
 const DataRow = ({ label, value, isStriped }) => (
@@ -13,14 +14,14 @@ const DataRow = ({ label, value, isStriped }) => (
     backgroundColor: isStriped ? 'rgba(139,115,85,0.06)' : 'transparent',
     padding: '0 8px',
   }}>
-    <span style={{ fontFamily: 'var(--font-cert)', fontSize: '13px', color: '#5C4A2A', whiteSpace: 'nowrap' }}>{label}</span>
+    <span style={{ fontFamily: 'var(--font-cert)', fontSize: isMobileViewport ? '11px' : '13px', color: '#5C4A2A', whiteSpace: 'nowrap' }}>{label}</span>
     <div style={{
       flexGrow: 1, margin: '0 8px', height: '1px',
       backgroundImage: 'radial-gradient(circle, #B8A898 1px, transparent 1px)',
       backgroundSize: '8px 8px', backgroundRepeat: 'repeat-x',
       backgroundPosition: 'bottom', position: 'relative', top: '-4px'
     }} />
-    <span style={{ fontFamily: 'var(--font-cert)', fontSize: '13px', color: '#2C2416', whiteSpace: 'nowrap' }}>{value}</span>
+    <span style={{ fontFamily: 'var(--font-cert)', fontSize: isMobileViewport ? '11px' : '13px', color: '#2C2416', whiteSpace: isMobileViewport ? 'normal' : 'nowrap', textAlign: 'right', maxWidth: isMobileViewport ? '52%' : 'unset' }}>{value}</span>
   </div>
 );
 
@@ -283,9 +284,9 @@ const DocumentScreen = ({
 
   return (
     <div style={{
-      width: '100vw', minHeight: '100vh', backgroundColor: 'var(--bg-primary)',
+      width: '100vw', minHeight: '100vh', backgroundColor: 'transparent',
       display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
-      padding: '60px 20px', position: 'relative'
+      padding: isMobileViewport ? '44px 12px' : '60px 20px', position: 'relative'
     }}>
       <div style={{ position: 'fixed', inset: 0, background: 'radial-gradient(circle, transparent 40%, rgba(0,0,0,0.6) 100%)', pointerEvents: 'none', zIndex: 0 }} />
 
@@ -296,7 +297,7 @@ const DocumentScreen = ({
         style={{
           width: '100%',
           maxWidth: '860px',
-          marginBottom: '20px',
+          marginBottom: isMobileViewport ? '12px' : '20px',
           borderRadius: '10px',
           border: `1px solid ${sourceColor}`,
           background:
@@ -306,7 +307,7 @@ const DocumentScreen = ({
                 ? 'linear-gradient(120deg, rgba(180,83,9,0.2) 0%, rgba(10,14,26,0.9) 55%, rgba(180,83,9,0.12) 100%)'
                 : 'linear-gradient(120deg, rgba(71,85,105,0.2) 0%, rgba(10,14,26,0.9) 55%, rgba(71,85,105,0.1) 100%)',
           boxShadow: `0 14px 34px rgba(0,0,0,0.4), ${feedStatusGlow}`,
-          padding: '14px 16px',
+          padding: isMobileViewport ? '10px 10px' : '14px 16px',
           position: 'relative',
           zIndex: 10,
         }}
@@ -314,7 +315,7 @@ const DocumentScreen = ({
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '12px', flexWrap: 'wrap' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
             <div style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: sourceColor, boxShadow: feedStatusGlow, animation: 'radiate 1.4s infinite' }} />
-            <div style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', letterSpacing: '0.1em', color: 'var(--text-bright)' }}>
+            <div style={{ fontFamily: 'var(--font-mono)', fontSize: isMobileViewport ? '10px' : '11px', letterSpacing: '0.1em', color: 'var(--text-bright)' }}>
               {feedStatusText}
             </div>
           </div>
@@ -338,7 +339,7 @@ const DocumentScreen = ({
         id="forecast-certificate"
         style={{
           width: '100%', maxWidth: '680px', backgroundColor: '#F5F0E8',
-          borderRadius: '2px', padding: '40px 48px', position: 'relative', zIndex: 10,
+          borderRadius: '2px', padding: isMobileViewport ? '30px 18px' : '40px 48px', position: 'relative', zIndex: 10,
           boxShadow: '0 20px 40px rgba(0,0,0,0.4), 0 0 0 1px rgba(255,255,255,0.05)',
           border: '2px solid #8B7355',
           outline: '0.5px solid #8B7355', outlineOffset: '-6px', overflow: 'hidden',
@@ -385,10 +386,10 @@ const DocumentScreen = ({
         {/* Header */}
         <div style={{ textAlign: 'center', marginBottom: '32px' }}>
           <div style={{ color: '#8B7355', letterSpacing: '-1px', overflow: 'hidden', whiteSpace: 'nowrap' }}>━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</div>
-          <h1 style={{ fontFamily: 'var(--font-mono)', fontSize: '14px', fontWeight: 'bold', color: '#2C2416', letterSpacing: '0.12em', margin: '12px 0 4px 0' }}>
+          <h1 style={{ fontFamily: 'var(--font-mono)', fontSize: isMobileViewport ? '12px' : '14px', fontWeight: 'bold', color: '#2C2416', letterSpacing: '0.12em', margin: '12px 0 4px 0' }}>
             VIBECAST
           </h1>
-          <div style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', color: '#5C4A2A', letterSpacing: '0.05em' }}>
+          <div style={{ fontFamily: 'var(--font-mono)', fontSize: isMobileViewport ? '9px' : '11px', color: '#5C4A2A', letterSpacing: '0.05em' }}>
             OFFICIAL PSYCHOLOGICAL FORECAST — 47-STEP CERTIFIED PROTOCOL
           </div>
           <div style={{ color: '#8B7355', letterSpacing: '-1px', overflow: 'hidden', whiteSpace: 'nowrap', marginTop: '8px' }}>━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</div>
@@ -404,11 +405,11 @@ const DocumentScreen = ({
         </div>
 
         {/* Advisory Block */}
-        <div style={{ borderLeft: '2px solid #8B7355', paddingLeft: '16px', marginBottom: '48px', width: '75%' }}>
+        <div style={{ borderLeft: '2px solid #8B7355', paddingLeft: '16px', marginBottom: '48px', width: isMobileViewport ? '100%' : '75%' }}>
           <div className="label-caps" style={{ fontSize: '9px', color: '#2D7D6A', marginBottom: '8px' }}>
             OFFICIAL WEATHER ADVISORY
           </div>
-          <div style={{ fontFamily: 'var(--font-signature)', fontStyle: 'italic', fontSize: '14px', color: '#2C2416', lineHeight: 1.8 }}>
+          <div style={{ fontFamily: 'var(--font-signature)', fontStyle: 'italic', fontSize: isMobileViewport ? '13px' : '14px', color: '#2C2416', lineHeight: 1.8 }}>
             "{certificate?.officialAdvisory || 'The storm is contained entirely within the skull. No external umbrellas will help. Suggest lying flat on the floor until the front passes.'}"
           </div>
         </div>
@@ -463,7 +464,7 @@ const DocumentScreen = ({
         initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: prefersReducedMotion ? 0 : 0.5, delay: prefersReducedMotion ? 0 : 1.8 }}
-        style={{ display: 'flex', gap: '12px', justifyContent: 'center', marginTop: '32px', marginBottom: '92px', zIndex: 10 }}
+        style={{ display: 'flex', gap: '12px', justifyContent: 'center', marginTop: '32px', marginBottom: '92px', zIndex: 10, flexWrap: 'wrap', width: 'min(720px, calc(100vw - 20px))' }}
       >
         <button
           type="button"
@@ -471,12 +472,14 @@ const DocumentScreen = ({
           disabled={isDownloading}
           style={{
           backgroundColor: 'var(--accent-red)', color: 'white',
-          fontFamily: 'var(--font-mono)', fontSize: '13px',
+          fontFamily: 'var(--font-mono)', fontSize: isMobileViewport ? '12px' : '13px',
           padding: '12px 24px', borderRadius: '4px', border: 'none',
           display: 'flex', alignItems: 'center', gap: '12px',
           cursor: isDownloading ? 'not-allowed' : 'pointer',
           opacity: isDownloading ? 0.75 : 1,
-          boxShadow: '0 4px 12px rgba(239,68,68,0.2)'
+          boxShadow: '0 4px 12px rgba(239,68,68,0.2)',
+          width: isMobileViewport ? '100%' : 'auto',
+          justifyContent: 'center'
         }}>
           <div style={{ width: '6px', height: '6px', borderRadius: '50%', backgroundColor: 'white', animation: isDownloading ? 'none' : 'radiate 1s infinite' }} />
           {isDownloading ? 'GENERATING PDF...' : 'DOWNLOAD FORECAST PDF'}
@@ -484,19 +487,20 @@ const DocumentScreen = ({
 
         <button onClick={handleShare} style={{
           backgroundColor: 'transparent', color: 'var(--text-primary)',
-          fontFamily: 'var(--font-mono)', fontSize: '13px',
+          fontFamily: 'var(--font-mono)', fontSize: isMobileViewport ? '12px' : '13px',
           padding: '12px 24px', borderRadius: '4px',
           border: '0.5px solid var(--text-secondary)', cursor: 'pointer',
-          transition: 'all 0.2s ease', width: '180px'
+          transition: 'all 0.2s ease', width: isMobileViewport ? 'calc(50% - 6px)' : '180px'
         }}>
           {copied ? "COPIED ✓" : "SHARE MY DIAGNOSIS"}
         </button>
 
         <button onClick={onReset} style={{
           backgroundColor: 'transparent', color: 'var(--text-muted)',
-          fontFamily: 'var(--font-mono)', fontSize: '11px',
+          fontFamily: 'var(--font-mono)', fontSize: isMobileViewport ? '10px' : '11px',
           padding: '12px 24px', border: 'none', cursor: 'pointer',
-          textDecoration: 'underline transparent', transition: 'text-decoration 0.2s ease'
+          textDecoration: 'underline transparent', transition: 'text-decoration 0.2s ease',
+          width: isMobileViewport ? 'calc(50% - 6px)' : 'auto'
         }}
           onMouseEnter={(e) => e.target.style.textDecorationColor = 'var(--text-muted)'}
           onMouseLeave={(e) => e.target.style.textDecorationColor = 'transparent'}

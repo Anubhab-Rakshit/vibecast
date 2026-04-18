@@ -2,6 +2,7 @@ import React, { useRef, useEffect } from 'react';
 import { gsap } from 'gsap';
 
 const prefersReducedMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+const isMobileViewport = window.matchMedia?.('(max-width: 900px)').matches;
 
 const Barometer = ({ step = 0 }) => {
   const needleRef = useRef(null);
@@ -65,11 +66,15 @@ const Barometer = ({ step = 0 }) => {
 
   return (
     <div style={{
-      position: 'absolute', left: '48px', bottom: '96px',
-      width: '180px', height: '120px',
+      position: 'absolute',
+      left: isMobileViewport ? '14px' : '48px',
+      bottom: isMobileViewport ? '74px' : '96px',
+      width: isMobileViewport ? '150px' : '180px',
+      height: isMobileViewport ? '104px' : '120px',
       backgroundColor: 'var(--bg-surface)',
       border: '0.5px solid var(--border-mid)',
-      borderRadius: '4px', padding: '16px',
+      borderRadius: '4px',
+      padding: isMobileViewport ? '10px' : '16px',
       display: 'flex', flexDirection: 'column', zIndex: 30
     }}>
       <div style={{ position: 'relative', width: '100%', height: '70px' }}>
@@ -96,7 +101,7 @@ const Barometer = ({ step = 0 }) => {
       </div>
 
       <div style={{ textAlign: 'center', marginTop: 'auto' }}>
-        <div ref={pctRef} style={{ fontFamily: 'var(--font-mono)', fontSize: '20px', color: 'var(--text-bright)', lineHeight: 1 }}>
+        <div ref={pctRef} style={{ fontFamily: 'var(--font-mono)', fontSize: isMobileViewport ? '16px' : '20px', color: 'var(--text-bright)', lineHeight: 1 }}>
           {percentage}%
         </div>
         <div style={{

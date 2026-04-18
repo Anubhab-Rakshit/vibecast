@@ -37,6 +37,8 @@ const screenVariants = {
 
 const prefersReducedMotion =
   typeof window !== 'undefined' && window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+const isMobileViewport =
+  typeof window !== 'undefined' && window.matchMedia?.('(max-width: 900px)').matches;
 
 function getMilestones(currentStep) {
   return {
@@ -454,7 +456,7 @@ function App() {
       <WeatherEngine weatherType={screen > 1 ? weatherType : null} />
       <NewsTicker />
       <CursorTrail />
-      {screen < 3 && (
+      {!isMobileViewport && screen < 3 && (
         <HUDBar
           isStreaming={isStreaming}
           isComplete={isComplete}
@@ -470,20 +472,20 @@ function App() {
         style={{
           position: 'fixed',
           left: '50%',
-          bottom: '18px',
+          bottom: isMobileViewport ? '10px' : '18px',
           transform: 'translateX(-50%)',
           zIndex: 9850,
-          width: 'min(720px, calc(100vw - 24px))',
+          width: isMobileViewport ? 'calc(100vw - 12px)' : 'min(720px, calc(100vw - 24px))',
           border: '1px solid var(--border-mid)',
-          borderRadius: '10px',
+          borderRadius: isMobileViewport ? '8px' : '10px',
           background: 'linear-gradient(108deg, rgba(10,14,26,0.9) 0%, rgba(12,18,30,0.9) 100%)',
           backdropFilter: 'blur(8px)',
           boxShadow: '0 10px 30px rgba(0,0,0,0.45)',
-          padding: '10px 12px',
+          padding: isMobileViewport ? '8px 8px' : '10px 12px',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
-          gap: '10px',
+          gap: isMobileViewport ? '6px' : '10px',
         }}
       >
         <button
@@ -491,22 +493,22 @@ function App() {
           onClick={handlePrevScreen}
           disabled={screen <= INITIAL_SCREEN || transitionLockRef.current}
           style={{
-            minWidth: '82px',
-            padding: '8px 10px',
+            minWidth: isMobileViewport ? '56px' : '82px',
+            padding: isMobileViewport ? '7px 8px' : '8px 10px',
             border: '1px solid var(--border-mid)',
             borderRadius: '6px',
             fontFamily: 'var(--font-mono)',
-            fontSize: '10px',
+            fontSize: isMobileViewport ? '9px' : '10px',
             letterSpacing: '0.08em',
             color: screen <= INITIAL_SCREEN ? 'var(--text-dim)' : 'var(--text-bright)',
             background: 'transparent',
             cursor: screen <= INITIAL_SCREEN ? 'not-allowed' : 'pointer',
           }}
         >
-          PREV
+          {isMobileViewport ? '<' : 'PREV'}
         </button>
 
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: isMobileViewport ? '4px' : '8px' }}>
           {[1, 2, 3, 4].map((target) => {
             const active = target === screen;
             return (
@@ -516,12 +518,12 @@ function App() {
                 onClick={() => handleNavigateTo(target)}
                 disabled={transitionLockRef.current}
                 style={{
-                  minWidth: '40px',
-                  padding: '7px 8px',
+                  minWidth: isMobileViewport ? '34px' : '40px',
+                  padding: isMobileViewport ? '6px 6px' : '7px 8px',
                   border: active ? '1px solid var(--accent-teal)' : '1px solid var(--border-mid)',
                   borderRadius: '6px',
                   fontFamily: 'var(--font-mono)',
-                  fontSize: '10px',
+                  fontSize: isMobileViewport ? '9px' : '10px',
                   color: active ? 'var(--accent-teal)' : 'var(--text-secondary)',
                   background: active ? 'rgba(74,222,204,0.08)' : 'transparent',
                   cursor: transitionLockRef.current ? 'not-allowed' : 'pointer',
@@ -538,19 +540,19 @@ function App() {
           onClick={handleNextScreen}
           disabled={screen >= LAST_SCREEN || transitionLockRef.current}
           style={{
-            minWidth: '82px',
-            padding: '8px 10px',
+            minWidth: isMobileViewport ? '56px' : '82px',
+            padding: isMobileViewport ? '7px 8px' : '8px 10px',
             border: '1px solid var(--border-mid)',
             borderRadius: '6px',
             fontFamily: 'var(--font-mono)',
-            fontSize: '10px',
+            fontSize: isMobileViewport ? '9px' : '10px',
             letterSpacing: '0.08em',
             color: screen >= LAST_SCREEN ? 'var(--text-dim)' : 'var(--text-bright)',
             background: 'transparent',
             cursor: screen >= LAST_SCREEN ? 'not-allowed' : 'pointer',
           }}
         >
-          NEXT
+          {isMobileViewport ? '>' : 'NEXT'}
         </button>
       </div>
 
